@@ -7,22 +7,35 @@
 
 <body>
   <form action="" method="post">
-    <div>
-      <label for="name">Full Name:</label>
-      <input type="text" id="name" />
-    </div>
-    <div>
-      <label for="mail">E-mail:</label>
-      <input type="email" id="mail" />
-    </div>
-    <div>
-      <label for="msg">Message:</label>
-      <textarea id="msg"></textarea>
-    </div>
-
-    <div class="button">
-      <button type="submit">Complete your RSVP!</button>
-    </div>
+    <fieldset id="RSVP">
+      <div>
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" name="full_name"/>
+      </div>
+      <div>
+        How will you celebrate with us?
+        <input type="radio" id="person" name="attendance" value="in person"/><label for="person">In person</label>
+        <input type="radio" id="spirit" name="attendance" value="in spirit"/><label for="spirit">In spirit</label>
+      </div>
+      <div class="button">
+        <button type="button">Next</button>
+      </div>
+    </fieldset>
+    <fieldset id="preferences">
+      <div>
+        <label for="diet_r">Do you have any dietary restrictions?</label>
+        <textarea type="text" id="diet_r" name="diet_restriction"></textarea>
+      </div>
+      <div>
+        Your favourite kind of beverage (pick up to two)<br />
+        <input type="checkbox" id="cbox_ww" value="white_wine"/><label for="cbox_ww">White Wine</label><br />
+        <input type="checkbox" id="cbox_rw" value="red_wine"/><label for="cbox_rw">Red Wine</label><br />
+        <input type="checkbox" id="cbox_b" value="beer"/><label for="cbox_b">Beer</label><br />
+        <input type="checkbox" id="cbox_na" value="non-alcoholic"/><label for="cbox_na">Non-alcoholic</label><br />
+      </div>
+      <div class="button">
+        <button type="submit">Complete your RSVP!</button>
+      </div>
   </form>
 </body>
 
