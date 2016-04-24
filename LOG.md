@@ -9,6 +9,15 @@
 
 * Switch to PHP, add conditionals and validation for certain values, moving to
   different pages
-* JQuery plan scrapped cause tutorials found [here](http://www.html-form-guide.com/php-form/php-form-validation-tutorial.html) and [here](http://www.html-form-guide.com/php-form/php-order-form.html) (same site, and [here](http://www.w3schools.com/php/php_sessions.asp) W3schools :O ). Will look for
-  other similar things... maybe.
+* JQuery plan scrapped cause tutorials found
+  [here](http://www.html-form-guide.com/php-form/php-form-validation-tutorial.html)
+  and [here](http://www.html-form-guide.com/php-form/php-order-form.html)
+  (same site), and [here](http://www.w3schools.com/php/php_sessions.asp)
+  (W3schools :O). Will look for other similar things... maybe.
 * Realize that more PHP needs to be learned by yours truly.
+
+## 2016-04-23
+
+* logic moved to second page for gatekeeping.
+* extracted invitation to separate HTML file. considering swapping the data around so that the document is only one file, but will see how that plays out
+* target completion is tomorrow

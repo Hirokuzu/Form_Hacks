@@ -1,57 +1,13 @@
 <?php
 session_start();
 
-$name_error = "";
-$attendance_error = "";
-$error = False;
-
-if($_SERVER["REQUEST_METHOD"] == "POST")
-{
-	$full_name = trim($_POST['full_name']);
-	if(empty($full_name))
-	{
-		$name_error = "Please enter your name.";
-		$error = True;
-	}
-	else
-	{
-	  $_SESSION["full_name"] = clean_input($_POST["full_name"]);
-	}
-
-	if(empty($_POST["attendance"]))
-	{
-		$attendance_error = "Please respond with your attendance!";
-		$error = True;
-	}
-	else {
-		$_SESSION["attendance"] = clean_input($_POST["attendance"]);
-	}
-
-  if(!$error)
-	{
-    if($_SESSION["attendance"] == "in person")
-    {
-      header("location: RSVP2.php");
-    }
-		else
-    {
-      header("location: RSVP_thankyou.php");
-    }
-	}
-  else
-  {
-    echo '<pre>'.print_r($_POST,true).'</pre>';
-  }
+// if we don't have them yet instantiate them
+if(!array_key_exists("attendance_error", $_SESSION)) {
+	$_SESSION["attendance_error"] = NULL;
 }
-
-function clean_input($data)
-{
-	$data = trim($data);
-	$data = stripslashes($data);
-	$data = htmlspecialchars($data);
-	return $data;
+if(!array_key_exists("name_error", $_SESSION)) {
+	$_SESSION["name_error"] = NULL;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -59,8 +15,8 @@ function clean_input($data)
 
 <head>
 	<link type="text/css" rel="stylesheet" href="stylesheet.css" />
-    <link href='https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,400' rel='stylesheet' type='text/css'>
-  <title>Tester Form based on Mozilla tutorial</title>
+  <link href='https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,400' rel='stylesheet' type='text/css'>
+  <title>Prudence and Mark's RSVP</title>
 </head>
 
 <body>
@@ -73,18 +29,18 @@ function clean_input($data)
 <p class="details">In order to confirm numbers with our vendors, we would appreciate if you RSVP before June 24, 2016. Due to the venue's capacity limitation, we are regretfully unable to extend our invitations to your partners.</p>
 </div>
 <div id="form">
-  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
+  <form action="RSVP2.php" method="post">
     <fieldset id="RSVP">
       <legend>RSVP</legend>
       <div>
         <label for="name">Full Name:</label>
         <input type="text" id="name" name="full_name"/>
-        <?php if(!empty($name_error)){ ?><span class='error'><?php echo $name_error ?></span><?php } ?>
+        <?php if(isset($_SESSION["name_error"])){ ?><span class='error'><?php echo $_SESSION["name_error"] ?></span><?php } ?>
       </div>
       <div>
         <fieldset>
           <legend>How will you celebrate with us?</legend>
-          <?php if(!empty($attendance_error)){ ?><span class='error'><?php echo $attendance_error ?></span><br /><?php } ?>
+          <?php if(isset($_SESSION["attendance_error"])){ ?><span class='error'><?php echo $_SESSION["attendance_error"] ?></span><br /><?php } ?>
           <input type="radio" id="person" name="attendance" value="in person"/><label for="person">In person</label><br />
           <input type="radio" id="spirit" name="attendance" value="in spirit"/><label for="spirit">In spirit</label><br />
         </fieldset>
