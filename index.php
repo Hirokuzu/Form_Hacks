@@ -34,14 +34,14 @@ if(!array_key_exists("name_error", $_SESSION)) {
       <legend>RSVP</legend>
       <div>
         <label for="name">Full Name:</label>
-        <input type="text" id="name" name="full_name"/>
+        <input type="text" id="name" name="full_name" required/>
         <?php if(isset($_SESSION["name_error"])){ ?><span class='error'><?php echo $_SESSION["name_error"] ?></span><?php } ?>
       </div>
       <div>
         <fieldset>
           <legend>How will you celebrate with us?</legend>
           <?php if(isset($_SESSION["attendance_error"])){ ?><span class='error'><?php echo $_SESSION["attendance_error"] ?></span><br /><?php } ?>
-          <input type="radio" id="person" name="attendance" value="in person"/><label for="person">In person</label><br />
+          <input type="radio" id="person" name="attendance" value="in person" required/><label for="person">In person</label><br />
           <input type="radio" id="spirit" name="attendance" value="in spirit"/><label for="spirit">In spirit</label><br />
         </fieldset>
       </div>

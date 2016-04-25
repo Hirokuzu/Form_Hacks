@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'helpers.php';
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -31,61 +32,56 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     unset($_SESSION["attendance_error"]);
   }
 
-  if(isset($_SESSION["attendance_error"]) || isset($_SESSION["name_error"]))
+  if(!empty($_SESSION["attendance_error"]) || !empty($_SESSION["name_error"]))
   {
-    header("location: index.php");
+    to_top();
   }
   else // no problems
   {
     if($_SESSION["attendance"] !== "in person") // either in spirit or it's BS value. Just say thank you.
     {
-      header("location: RSVP_thankyou.php");
+      to_end();
     }
   }
 }
-else // no data submitted from previous form. what?
+else // did we get rejected?
 {
-  header("location: index.php");
+  if(!isset($_SESSION["drinks_error"])) {
+  }
 }
 
-function clean_input($data)
-{
-       $data = trim($data);
-       $data = stripslashes($data);
-       $data = htmlspecialchars($data);
-       return $data;
-}
-
-// some other stuff here
 ?>
 
 <!DOCTYPE html>
 <html>
 
 <head>
-	<?php include("styling.html"); ?>
+	<link type="text/css" rel="stylesheet" href="stylesheet.css" />
+  <link href='https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,400' rel='stylesheet' type='text/css'>
   <title>Prudence and Mark's RSVP</title>
 </head>
 
 <body>
+  <?php print_state() ?>
   <div id="flexwrap">
   <?php
     readfile("invitation.html");
   ?>
+  <div id="form">
 <form action="RSVP_thankyou.php" method="post">
   <fieldset id="preferences">
     <legend>Food, beverage preferences</legend>
     <div>
       <label for="diet_r">Do you have any dietary restrictions?</label>
-      <input type="text" id="diet_r" name="diet_restriction"></input>
+      <input type="text" id="diet_r" name="diet_restriction" value="<?php if(array_key_exists("diet_restriction", $_SESSION)) echo $_SESSION["diet_restriction"]?>"/>
     </div>
     <div>
       <fieldset>
         <legend>Your favourite kind of beverage (pick up to two):</legend>
         <?php
-          if(array_key_exists("drink_error", $_SESSION) && isset($_SESSION["drink_error"]))
+          if(array_key_exists("drinks_error", $_SESSION) && isset($_SESSION["drinks_error"]))
           {
-            echo "<span class=\"error\">".$_SESSION["drink_error"]."</span>";
+            echo "<span class=\"error\">".$_SESSION["drinks_error"]."</span><br>";
           }
         ?>
         <input type="checkbox" id="cbox_ww" name="drinks[]" value="white_wine"/><label for="cbox_ww">White Wine</label><br />
@@ -96,12 +92,13 @@ function clean_input($data)
     </div>
     <div>
       <label for="songs">I'll rock the dance floor if you play:</label>
-      <input type="text" id="songs" name="songs"></input>
+      <input type="text" id="songs" name="songs" value="<?php if(array_key_exists("songs", $_SESSION)) echo $_SESSION["songs"]?>"/>
     <div class="button">
       <button type="submit">Complete your RSVP!</button>
     </div>
   </fieldset>
 </form>
+</div>
 </div>
 </body>
 </html>

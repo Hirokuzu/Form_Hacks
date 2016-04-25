@@ -1,39 +1,100 @@
 <?php
   session_start();
+  include 'helpers.php';
+  $email_success = false;
 
-  // validate if POST
-  if($_SERVER["REQUEST_METHOD"] == "POST") // should be from second page
+  // validate if first page data
+  if(!array_key_exists("full_name",$_SESSION))
+  {
+    $_SESSION["name_error"] = "No name entered.";
+  }
+  if(!array_key_exists("attendance", $_SESSION))
+  {
+    $_SESSION["attendance_error"] = "Please respond with your attendance!";
+  }
+
+  if(!empty($_SESSION["attendance_error"]) || !empty($_SESSION["name_error"]))
+  {
+    to_top();
+    echo "<pre>POST:\n".print_r($_POST,true)."</pre>";
+    echo "<pre>SESSION:\n".print_r($_SESSION,true)."</pre>";
+  }
+  unset($_SESSION["attendance_error"]);
+  unset($_SESSION["name_error"]);
+
+  // validate if second page data exists
+  if($_SERVER["REQUEST_METHOD"] == "POST")
   {
     // check for the second page variables
     // process if they exist, add to POST for Google sheets,
     // email as well
-    if(array_key_exists("drinks", $_POST)) {
+    if(array_key_exists("drinks", $_POST))
+    {
       if(count($_POST["drinks"]) > 2)
       {
-
+        $_SESSION["drinks_error"] = "Please select at most two drinks.";
+        to_two();
       }
-    } else {
-      // set error, go back
+
+    } else { // we want drinks so pick some
+      $_SESSION["drinks_error"] = "Please select at at least one drink.";
+      to_two();
+    }
+    if(array_key_exists("diet_restriction", $_POST))
+    {
+      $_SESSION["diet_restriction"] = clean_input($_POST["diet_restriction"]);
+    }
+    if(array_key_exists("songs", $_POST))
+    {
+      $_SESSION["songs"] = clean_input($_POST["songs"]);
     }
   }
-  // if not post, then check for session variables to determine which page to go to
 
-
-
-  session_unset();
-  session_destroy();
+  $form_response = "Name:".$_SESSION["full_name"].";\r\n";
+  $form_response .= "Attendance:".$_SESSION["attendance"].";\r\n";
+  if(array_key_exists("diet_restriction", $_POST)) {
+    $diet_r = clean_input($_POST["diet_restriction"]);
+    if(!empty($diet_r)) {
+      $form_response .= "Diet_restriction:".$diet_r.";\r\n";
+    }
+  }
+  if(array_key_exists("drinks",$_POST)) {
+    $form_response .= "Drinks:".implode(",",$_POST["drinks"]).";\r\n";
+  }
+  if(array_key_exists("songs",$_POST)) {
+    $songs = clean_input($_POST["songs"]);
+    if(!empty($songs)) {
+      $form_response .= "songs:".$songs.";\r\n";
+    }
+  }
+  wordwrap($form_response);
+  //$email_success = mail("prudenceandmark@gmail.com","RSVP for ".$_SESSION["full_name"],$form_response);
+  if($email_success) {
+    session_unset();
+    session_destroy();
+  }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-  <?php include("styling.html"); ?>
+  <link type="text/css" rel="stylesheet" href="stylesheet.css" />
+  <link href='https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,400' rel='stylesheet' type='text/css'>
   <title>Prudence and Mark's RSVP</title>
 </head>
 
 <body>
 <?php
 // conditional for whether or not we'll see you on the day
+  echo "<pre>".$form_response."</pre>";
 ?>
+<!--// thank you message-->
+<!--// press button to go to return to homepage, clear session-->
+<div id="flexwrap">
+  Thank you for your response.
+  <!-- going message? -->
+  <!-- not going message? -->
+  <a href="index.php" class="button">Submit another response</a>
+</div>
 </body>
 </html>
