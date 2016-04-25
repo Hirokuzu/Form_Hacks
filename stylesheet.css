@@ -67,6 +67,9 @@ fieldset {
 fieldset div {
 	margin: 0.5em 0;
 }
+legend {
+	margin-top:1em;
+}
 textarea {
 	display:block;
 	border: 1px solid #ddd;
@@ -78,6 +81,9 @@ textarea {
 }
 #name:focus {
 	border-bottom:2px #FDC900 solid;
+}
+input:focus {
+	border:2px solid #FDC900;
 }
 button {
 	border-radius: 0; 
