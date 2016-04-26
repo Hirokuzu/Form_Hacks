@@ -1,15 +1,18 @@
 <?php
 
   function to_top() {
-    header("location: index.php");
+    header("location: /marriesMarkFussell");
+	exit;
   }
 
   function to_two() {
-    header("location: RSVP2.php");
+    header("location: /RSVP2");
+	exit;
   }
 
   function to_end() {
-    header("location: RSVP_thankyou.php");
+    header("location: /RSVP_thankyou");
+	exit;
   }
 
   function clean_input($data)

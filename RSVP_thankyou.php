@@ -16,8 +16,6 @@
   if(!empty($_SESSION["attendance_error"]) || !empty($_SESSION["name_error"]))
   {
     to_top();
-    echo "<pre>POST:\n".print_r($_POST,true)."</pre>";
-    echo "<pre>SESSION:\n".print_r($_SESSION,true)."</pre>";
   }
   unset($_SESSION["attendance_error"]);
   unset($_SESSION["name_error"]);
@@ -28,18 +26,19 @@
     // check for the second page variables
     // process if they exist, add to POST for Google sheets,
     // email as well
+	$_SESSION["drinks_error"] = NULL;
     if(array_key_exists("drinks", $_POST))
     {
-      if(count($_POST["drinks"]) > 2)
+		$num_drinks = count($_POST["drinks"]);
+      if($num_drinks > 2)
       {
         $_SESSION["drinks_error"] = "Please select at most two drinks.";
-        to_two();
       }
 
     } else { // we want drinks so pick some
       $_SESSION["drinks_error"] = "Please select at at least one drink.";
-      to_two();
     }
+	
     if(array_key_exists("diet_restriction", $_POST))
     {
       $_SESSION["diet_restriction"] = clean_input($_POST["diet_restriction"]);
@@ -48,6 +47,10 @@
     {
       $_SESSION["songs"] = clean_input($_POST["songs"]);
     }
+	
+	if(isset($_SESSION["drinks_error"])) {
+		to_two();
+	}
   }
 
   $form_response = "Name:".$_SESSION["full_name"].";\r\n";
@@ -68,11 +71,7 @@
     }
   }
   wordwrap($form_response);
-  //$email_success = mail("prudenceandmark@gmail.com","RSVP for ".$_SESSION["full_name"],$form_response);
-  if($email_success) {
-    session_unset();
-    session_destroy();
-  }
+  $email_success = mail("prudenceandmark@gmail.com","RSVP for ".$_SESSION["full_name"],$form_response);
 ?>
 
 <!DOCTYPE html>
@@ -84,17 +83,19 @@
 </head>
 
 <body>
-<?php
-// conditional for whether or not we'll see you on the day
-  echo "<pre>".$form_response."</pre>";
-?>
-<!--// thank you message-->
-<!--// press button to go to return to homepage, clear session-->
 <div id="flexwrap">
-  Thank you for your response.
-  <!-- going message? -->
-  <!-- not going message? -->
-  <a href="index.php" class="button">Submit another response</a>
+  <p>Thank you for your response!</p>
+<?php
+if($_SESSION["attendance"] == "in person")
+{
+	echo "<p>We look forward to celebrating with you!</p>";
+}
+  if($email_success) {
+    session_unset();
+    session_destroy();
+  }
+?>
+  <p><a href="marriesMarkFussell" class="button">Submit another response</a></p>
 </div>
 </body>
 </html>

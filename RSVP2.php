@@ -21,7 +21,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
       unset($_SESSION["name_error"]);
     }
   }
-
+	
   if(!array_key_exists("attendance", $_POST))
   {
     $_SESSION["attendance_error"] = "Please respond with your attendance!";
@@ -62,13 +62,12 @@ else // did we get rejected?
 </head>
 
 <body>
-  <?php print_state() ?>
   <div id="flexwrap">
   <?php
     readfile("invitation.html");
   ?>
   <div id="form">
-<form action="RSVP_thankyou.php" method="post">
+<form action="RSVP_thankyou.php" method="post" accept-charset="UTF-8">
   <fieldset id="preferences">
     <legend>Food, beverage preferences</legend>
     <div>

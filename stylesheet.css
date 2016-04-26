@@ -94,6 +94,9 @@ button {
 	font-weight: 200;
 	margin: 1em 0;
 }
+.button {
+	margin-left:5px;
+}
 @media screen and (max-width:768px) {
 	#flexwrap {
 		display:block;
